@@ -3,10 +3,10 @@ from snowflake import connector
 import pandas as pd
 
 ctx = connector.connect(
-    account='mmm-ww.privatelink',
+    account='',
     #user='us336280@mmm.com',
-    user =  "USSOAT01",
-    password='Snowstopping0$8',
+    user =  "",
+    password='',
     database='SFDB_DEV',
     warehouse='WH_XS',
     schema='DFASTDICTW01',
