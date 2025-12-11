@@ -27,6 +27,9 @@ jobs:
         run: |
           az acr login --name coolpizzawinter
 
+          name: List files run: 
+          ls -la
+
       - name: Build Docker image
         run: |
           docker build -t coolpizzawinter.azurecr.io/streamlit-app:latest .
@@ -40,5 +43,6 @@ jobs:
         with:
           app-name: streamlit-pr
           images: coolpizzawinter.azurecr.io/streamlit-app:latest
+
 
 
