@@ -41,3 +41,4 @@ jobs:
           app-name: streamlit-pr
           images: coolpizzawinter.azurecr.io/streamlit-app:latest
 
+
