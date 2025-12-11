@@ -20,19 +20,23 @@ jobs:
       - name: Azure Login
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_6DB0444203034E6CBF2F9D5E622957DA }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_4CE948718F3740F8B70442E8D8A55AE5 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_5AB0FC391E7A4281B48D416599B7EDFD }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Build and push container image to ACR
-        uses: azure/acr-build@v1
-        with:
-          registry: coolpizzawinter.azurecr.io
-          image: streamlit-app:latest
-          dockerfile: dockerfile1
-          context: .
+      - name: Log in to ACR
+        run: |
+          az acr login --name coolpizzawinter
 
-      - name: Deploy to Azure Web App for Containers
+      - name: Build Docker image
+        run: |
+          docker build -t coolpizzawinter.azurecr.io/streamlit-app:latest .
+
+      - name: Push Docker image
+        run: |
+          docker push coolpizzawinter.azurecr.io/streamlit-app:latest
+
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: streamlit-pr
