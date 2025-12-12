@@ -1,4 +1,4 @@
-name: Deploy Streamlit App to Azure Web App
+name: Build and Deploy Streamlit Container to Azure
 
 on:
   push:
@@ -9,6 +9,8 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout code
@@ -19,8 +21,20 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Deploy to Azure Web App
+
+
+      - name: Log in to Azure Container Registry
+        run: |
+          az acr login --name coolpizzawinter
+          ls -la
+      - name: Build Docker image
+        run: |
+          docker build -t coolpizzawinter.azurecr.io/streamlit-app:latest .
+      - name: Push Docker image
+        run: |
+          docker push coolpizzawinter.azurecr.io/streamlit-app:latest
+      - name: Deploy to Azure Web App for Containers
         uses: azure/webapps-deploy@v3
         with:
-          app-name: streamlitLX
-          package: .
+          app-name: streamlit-pr
+          images: coolpizzawinter.azurecr.io/streamlit-app:latest
